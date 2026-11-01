@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <base href="/buzzme/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="BuzzMe — мессенджер">
+  <meta name="theme-color" content="#0E0A16">
+  <meta name="color-scheme" content="dark">
+
+  <!-- iOS: запуск с экрана «Домой» как приложение -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BuzzMe">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="manifest.json">
+  <title>BuzzMe</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0; width: 100%; height: 100%; height: 100dvh; overflow: hidden;
+      background: #0E0A16; overscroll-behavior: none;
+      -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%;
+    }
+    /* Flutter рисует на весь экран; отступы от «чёлки» и полоски «Домой»
+       передаются в приложение (window.buzzSafeArea), чтобы фон панелей доходил до краёв. */
+    #app { position: fixed; inset: 0; }
+    /* iOS PWA с экрана «Домой»: 100%/dvh бывает короче экрана (полоса снизу) — берём высоту экрана. */
+    @media (display-mode: standalone) {
+      html, body { height: 100vh; }
+      #app { bottom: auto; height: 100vh; }
+    }
+    #sa {
+      position: fixed; top: 0; left: 0; width: 0; height: 0; visibility: hidden; pointer-events: none;
+      padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+    }
+    #splash {
+      position: fixed; inset: 0; z-index: 10;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: radial-gradient(circle at 50% 42%, #1d0f33 0%, #0E0A16 62%);
+      transition: opacity .15s ease;
+    }
+    #splash img { width: 168px; height: 168px; animation: pulse 1.6s ease-in-out infinite; }
+    #splash .bar {
+      margin-top: 28px; width: 72px; height: 3px; border-radius: 3px; overflow: hidden;
+      background: rgba(255,255,255,.08); position: relative;
+    }
+    #splash .bar::after {
+      content: ""; position: absolute; top: 0; left: -40%; width: 40%; height: 100%;
+      border-radius: 3px; background: #8A3FFC; animation: slide 1.1s ease-in-out infinite;
+    }
+    #splash.hide { opacity: 0; pointer-events: none; }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+    @keyframes slide { 0% { left: -40%; } 100% { left: 100%; } }
+  </style>
+</head>
+<body>
+  <div id="splash"><img src="icons/splash-logo.webp" alt="BuzzMe"><div class="bar"></div></div>
+  <div id="app"></div>
+  <div id="sa"></div>
+  <script>
+    // Экранная клавиатура iOS: размер страницы не меняется, сокращается только visualViewport.
+    // Считаем высоту клавиатуры сами и отдаём её Flutter (window.buzzOnInsets), а #app
+    // прижимаем к верху видимой области, если iOS всё-таки сдвинул страницу.
+    var buzzKb = 0;
+    function buzzFit() {
+      var vv = window.visualViewport, app = document.getElementById('app');
+      if (!vv || !app) return;
+      if (window.scrollY || window.scrollX) window.scrollTo(0, 0);
+      var top = vv.offsetTop || 0;
+      var kb = Math.max(0, Math.round(app.clientHeight - vv.height - top));
+      if (kb < 80) kb = 0; // панели браузера и погрешности — не клавиатура
+      app.style.transform = top > 0 ? 'translateY(' + top + 'px)' : '';
+      if (kb !== buzzKb) {
+        buzzKb = kb;
+        if (typeof window.buzzOnInsets === 'function') window.buzzOnInsets();
+      }
+    }
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', buzzFit);
+      window.visualViewport.addEventListener('scroll', buzzFit);
+    }
+    window.addEventListener('scroll', buzzFit, { passive: true });
+    // [top, right, bottom, left, keyboard] в CSS px (= логические px Flutter).
+    window.buzzSafeArea = function () {
+      var st = getComputedStyle(document.getElementById('sa'));
+      var v = [st.paddingTop, st.paddingRight, st.paddingBottom, st.paddingLeft].map(function (x) { return parseFloat(x) || 0; });
+      if (buzzKb > 0) v[2] = 0; // клавиатура закрывает полоску «Домой»
+      v.push(buzzKb);
+      return v;
+    };
+    // Face ID / Touch ID в вебе: локальный ключ WebAuthn как «замок» поверх код-пароля
+    // (как local_auth на Android — сервер не участвует). Возвращают Promise.
+    function buzzB64u(buf) {
+      var b = new Uint8Array(buf), s = '';
+      for (var i = 0; i < b.length; i++) s += String.fromCharCode(b[i]);
+      return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+    function buzzUnb64u(str) {
+      str = str.replace(/-/g, '+').replace(/_/g, '/');
+      while (str.length % 4) str += '=';
+      var s = atob(str), b = new Uint8Array(s.length);
+      for (var i = 0; i < s.length; i++) b[i] = s.charCodeAt(i);
+      return b;
+    }
+    function buzzRand(n) { var a = new Uint8Array(n); crypto.getRandomValues(a); return a; }
+    window.buzzWebAuthnAvailable = function () {
+      try {
+        if (!window.PublicKeyCredential || !PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) return Promise.resolve(false);
+        return PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(function () { return false; });
+      } catch (e) { return Promise.resolve(false); }
+    };
+    window.buzzWebAuthnRegister = function (name) {
+      try {
+        return navigator.credentials.create({ publicKey: {
+          rp: { name: 'BuzzMe', id: location.hostname },
+          user: { id: buzzRand(16), name: name || 'BuzzMe', displayName: name || 'BuzzMe' },
+          challenge: buzzRand(32),
+          pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
+          authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'discouraged' },
+          timeout: 60000, attestation: 'none'
+        } }).then(function (c) { return c ? buzzB64u(c.rawId) : null; }, function () { return null; });
+      } catch (e) { return Promise.resolve(null); }
+    };
+    window.buzzWebAuthnVerify = function (id) {
+      try {
+        return navigator.credentials.get({ publicKey: {
+          challenge: buzzRand(32), rpId: location.hostname, timeout: 60000, userVerification: 'required',
+          allowCredentials: [{ type: 'public-key', id: buzzUnb64u(id), transports: ['internal'] }]
+        } }).then(function (c) { return !!c; }, function () { return false; });
+      } catch (e) { return Promise.resolve(false); }
+    };
+    window.addEventListener('flutter-first-frame', function () {
+      var s = document.getElementById('splash');
+      s.classList.add('hide');
+      setTimeout(function () { s.remove(); }, 200);
+    });
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
