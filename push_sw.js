@@ -7,7 +7,7 @@ self.addEventListener('push', (event) => {
   try { d = event.data ? event.data.json() : {}; } catch (_) { d = { body: event.data && event.data.text() }; }
   const scope = self.registration.scope;
   event.waitUntil(self.registration.showNotification(d.title || 'BuzzMe', {
-    body: d.body || 'Новое сообщение',
+    body: d.body || fallbackBody(),
     icon: scope + 'icons/Icon-192.png',
     badge: scope + 'icons/Icon-192.png',
     tag: d.tag || undefined,
@@ -32,3 +32,9 @@ self.addEventListener('notificationclick', (event) => {
     await self.clients.openWindow(url);
   })());
 });
+
+// Запасной текст, если сервер не прислал тело (язык браузера: ru / en / hy).
+function fallbackBody() {
+  const l = (self.navigator && self.navigator.language || 'ru').slice(0, 2);
+  return l === 'en' ? 'New message' : l === 'hy' ? 'Նոր հաղորդագրություն' : 'Новое сообщение';
+}
