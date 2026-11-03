@@ -61232,7 +61232,7 @@ e.push(B.d7)
 e.push(new A.ec(A.b([A.cy(!1,c,c,c,!0,c,c,c,!0,c,B.WO,c,c,c,c,new A.aJa(this,a,a0),!1,c,c,c,c,c,c,A.a5("\u0412\u044b\u0439\u0442\u0438",c,c,c,c,A.x(a).ok.y.bL(B.av),c,c),c,c,c)],m),c))
 e.push(B.d7)
 b=n===B.jr?" \xb7 \u0434\u0435\u043c\u043e-\u0440\u0435\u0436\u0438\u043c":""
-e.push(A.a5("BuzzMe 1.5.1"+b,c,c,c,c,A.x(a).ok.Q.bL(i),B.ak,c))
+e.push(A.a5("BuzzMe 1.5.2"+b,c,c,c,c,A.x(a).ok.Q.bL(i),B.ak,c))
 e.push(B.qL)
 e.push(A.a5("\u0421\u043e\u0437\u0434\u0430\u043d\u043e \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e Grok",c,c,c,c,A.x(a).ok.Q.wC(i,11),B.ak,c))
 return A.eY(l,c,A.hW(e,B.fL,c,B.a0),c,!1,!1,c)}}
@@ -61533,7 +61533,7 @@ l(){this.gEA().l()
 this.alu()},
 I(a){var s=null,r=t.n.a(A.x(a).c.h(0,A.ay(t.W)))
 r.toString
-return A.eY(s,s,new A.r5(A.f8(!0,A.cu(A.b([B.agA,new A.qC("assets/logo/"+this.gbD().aM($.mF(),t.RY).b.a+".webp",168,!0,s),B.agn,A.a5("BuzzMe",s,s,s,s,A.x(a).ok.a,s,s),B.fd,A.a5("\u0411\u044b\u0441\u0442\u0440\u044b\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f. \u0412\u0441\u0435\u0433\u0434\u0430 \u043d\u0430 \u0441\u0432\u044f\u0437\u0438.",s,s,s,s,A.x(a).ok.y.bL(r.w),s,s),B.agB,A.cr(A.amN(A.cm(2),A.i4(this.gEA(),new A.b1Q(this,r),s)),s,84),B.fe,A.a5("\u0432\u0435\u0440\u0441\u0438\u044f "+B.c.Z("1.5.1",0,3),s,s,s,s,A.x(a).ok.Q.bL(r.x),s,s),B.mu],t.p),B.A,B.q,B.T),B.a4,!0),B.Ol,0.85,s),s,!1,!1,s)}}
+return A.eY(s,s,new A.r5(A.f8(!0,A.cu(A.b([B.agA,new A.qC("assets/logo/"+this.gbD().aM($.mF(),t.RY).b.a+".webp",168,!0,s),B.agn,A.a5("BuzzMe",s,s,s,s,A.x(a).ok.a,s,s),B.fd,A.a5("\u0411\u044b\u0441\u0442\u0440\u044b\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f. \u0412\u0441\u0435\u0433\u0434\u0430 \u043d\u0430 \u0441\u0432\u044f\u0437\u0438.",s,s,s,s,A.x(a).ok.y.bL(r.w),s,s),B.agB,A.cr(A.amN(A.cm(2),A.i4(this.gEA(),new A.b1Q(this,r),s)),s,84),B.fe,A.a5("\u0432\u0435\u0440\u0441\u0438\u044f "+B.c.Z("1.5.2",0,3),s,s,s,s,A.x(a).ok.Q.bL(r.x),s,s),B.mu],t.p),B.A,B.q,B.T),B.a4,!0),B.Ol,0.85,s),s,!1,!1,s)}}
 A.b1Q.prototype={
 $2(a,b){var s,r=this.a.gEA().x
 r===$&&A.a()
