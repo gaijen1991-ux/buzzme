@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.buzzme.app",
+      "sha256_cert_fingerprints": [
+        "67:63:42:9D:E2:30:6F:B6:FE:1F:B7:7D:29:DC:63:72:42:F2:95:C1:2C:DD:4B:BB:CD:EC:65:45:88:03:8A:52"
+      ]
+    }
+  }
+]
