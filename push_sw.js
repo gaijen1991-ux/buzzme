@@ -6,7 +6,7 @@ self.addEventListener('push', (event) => {
   let d = {};
   try { d = event.data ? event.data.json() : {}; } catch (_) { d = { body: event.data && event.data.text() }; }
   const scope = self.registration.scope;
-  event.waitUntil(self.registration.showNotification(d.title || 'BuzzMe', {
+  event.waitUntil(self.registration.showNotification(d.title || 'BuzzYou', {
     body: d.body || fallbackBody(),
     icon: scope + 'icons/Icon-192.png',
     badge: scope + 'icons/Icon-192.png',
