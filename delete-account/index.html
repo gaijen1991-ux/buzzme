@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Удаление аккаунта — BuzzYou</title><style>body{margin:0;background:#0E0A16;color:#F4F0FF;font-family:-apple-system,Segoe UI,Roboto,Helvetica,sans-serif;line-height:1.55}
+.wrap{max-width:720px;margin:0 auto;padding:32px 18px 64px}
+h1{font-size:28px;margin:0 0 8px}
+h2{font-size:18px;margin:28px 0 8px;color:#E9D5FF}
+p,li{color:#B9AED1} a{color:#A855F7} .muted{font-size:13px;color:#7E7396}
+.card{background:#1A1426;border:1px solid #2E2442;border-radius:16px;padding:16px;margin:16px 0}
+input,textarea{width:100%;box-sizing:border-box;background:#0E0A16;border:1px solid #2E2442;border-radius:12px;color:#F4F0FF;padding:12px;margin:8px 0}
+button{background:linear-gradient(135deg,#7C3AED,#A855F7);border:0;border-radius:12px;color:#fff;font-weight:700;padding:12px 18px;cursor:pointer}
+</style></head><body><div class="wrap">
+<p><a href="../">← BuzzYou</a></p>
+<h1>Удаление аккаунта BuzzYou</h1>
+<p>Вы можете удалить аккаунт прямо в приложении. Это удалит профиль и связанные персональные данные.</p>
+<div class="card">
+<h2 style="margin-top:0">В приложении</h2>
+<ol>
+<li>Откройте BuzzYou и войдите в аккаунт.</li>
+<li>Перейдите в <b>Настройки</b>.</li>
+<li>Нажмите <b>Удалить аккаунт</b> и подтвердите действие дважды.</li>
+</ol>
+<p class="muted">Веб-версия: те же шаги в меню настроек.</p>
+</div>
+<div class="card">
+<h2 style="margin-top:0">Запрос по почте</h2>
+<p>Если нет доступа к аккаунту, отправьте запрос с адреса, на который регистрировались. Укажите имя пользователя (@ник).</p>
+<form onsubmit="event.preventDefault();const e=document.getElementById('em').value.trim();const u=document.getElementById('un').value.trim();const m=document.getElementById('msg').value.trim();const body=encodeURIComponent('Запрос на удаление аккаунта BuzzYou\nEmail: '+e+'\nНик: '+u+'\n\n'+m);const to='SUPPORT_EMAIL_PLACEHOLDER@example.com'; location.href='mailto:'+to+'?subject='+encodeURIComponent('BuzzYou: удаление аккаунта')+'&body='+body;">
+<label>Ваш email<input id="em" type="email" required placeholder="you@example.com"></label>
+<label>Имя пользователя<input id="un" required placeholder="@username"></label>
+<label>Комментарий<textarea id="msg" rows="4" placeholder="Кратко опишите ситуацию"></textarea></label>
+<button type="submit">Открыть письмо в почте</button>
+</form>
+<p class="muted">Адрес поддержки в письме — плейсхолдер; актуальный указан в приложении (Настройки → Поддержка) и в таблице app_config.</p>
+</div>
+</div></body></html>
