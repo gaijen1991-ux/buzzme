@@ -12,20 +12,22 @@ self.addEventListener('push', (event) => {
     badge: scope + 'icons/Icon-192.png',
     tag: d.tag || undefined,
     renotify: !!d.tag,
-    data: { chat_id: d.chat_id || null },
+    data: { chat_id: d.chat_id || null, type: d.type || null },
   }));
 });
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   const chat = event.notification.data && event.notification.data.chat_id;
-  const url = self.registration.scope + (chat ? '?chat=' + encodeURIComponent(chat) : '');
+  const support = event.notification.data && event.notification.data.type === 'support';
+  const url = self.registration.scope + (support ? '?support=1' : chat ? '?chat=' + encodeURIComponent(chat) : '');
   event.waitUntil((async () => {
     const all = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
     for (const c of all) {
       if (c.url.startsWith(self.registration.scope)) {
         await c.focus();
-        if (chat) c.postMessage({ type: 'open_chat', chat_id: chat });
+        if (support) c.postMessage({ type: 'open_support' });
+        else if (chat) c.postMessage({ type: 'open_chat', chat_id: chat });
         return;
       }
     }

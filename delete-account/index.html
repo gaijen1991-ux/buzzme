@@ -21,14 +21,9 @@ button{background:linear-gradient(135deg,#7C3AED,#A855F7);border:0;border-radius
 <p class="muted">Веб-версия: те же шаги в меню настроек.</p>
 </div>
 <div class="card">
-<h2 style="margin-top:0">Запрос по почте</h2>
-<p>Если нет доступа к аккаунту, отправьте запрос с адреса, на который регистрировались. Укажите имя пользователя (@ник).</p>
-<form onsubmit="event.preventDefault();const e=document.getElementById('em').value.trim();const u=document.getElementById('un').value.trim();const m=document.getElementById('msg').value.trim();const body=encodeURIComponent('Запрос на удаление аккаунта BuzzYou\nEmail: '+e+'\nНик: '+u+'\n\n'+m);const to='SUPPORT_EMAIL_PLACEHOLDER@example.com'; location.href='mailto:'+to+'?subject='+encodeURIComponent('BuzzYou: удаление аккаунта')+'&body='+body;">
-<label>Ваш email<input id="em" type="email" required placeholder="you@example.com"></label>
-<label>Имя пользователя<input id="un" required placeholder="@username"></label>
-<label>Комментарий<textarea id="msg" rows="4" placeholder="Кратко опишите ситуацию"></textarea></label>
-<button type="submit">Открыть письмо в почте</button>
-</form>
-<p class="muted">Адрес поддержки в письме — плейсхолдер; актуальный указан в приложении (Настройки → Поддержка) и в таблице app_config.</p>
+<h2 style="margin-top:0">Помощь с удалением аккаунта</h2>
+<p>Поддержка доступна внутри приложения BuzzYou в разделе «Поддержка BuzzYou». Обращения по электронной почте на этой странице не принимаются.</p>
+<p><a href="https://buzzme.pages.dev/?support=1">Открыть поддержку в приложении</a></p>
+<p class="muted">Если ссылка не открывает приложение, откройте BuzzYou самостоятельно и перейдите в Настройки → «Поддержка BuzzYou».</p>
 </div>
 </div></body></html>
